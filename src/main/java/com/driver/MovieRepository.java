@@ -7,80 +7,44 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
 @Repository
 public class MovieRepository {
-
-    Map<String , Movie> db = new HashMap<>();
-    Map<String , Director> db_D = new HashMap<>();
-
-    Map<String , String> pair = new HashMap<>();
-
-
-
-    public String addMovie(Movie movie){
-        String name = movie.getName();
-        db.put(name,movie);
-        return "Movie Added succesfully";
+    Map<String,Movie> moviecollection = new HashMap<>();
+    Map<String,Director> directorcollection = new HashMap<>();
+    Map<Director,List<Movie>> pair = new HashMap<>();
+    //Add a movie
+    void addMovie(String mname,Movie movie){
+        moviecollection.put(mname,movie);
     }
-
-    public Movie getMovie(String name){
-        return db.get(name);
+    //Add a director
+    void addDirector(String dname ,Director director){
+        directorcollection.put(dname,director);
     }
+    //Pair an existing movie and director
+    void addMovieDirectorPair(Director director,List<Movie> movie){
+        pair.put(director,movie);
 
-    public String addDirector(Director director) {
-        String name = director.getName();
-        db_D.put(name,director);
-        return "Director Added succesfully";
     }
-
-    public Director getDirector(String name) {
-        return db_D.get(name);
+    //Get Movie by movie name
+    Movie getMovieByName(String name){
+        return moviecollection.get(name);
     }
-
-    public String deleteDirector(String name) {
-        if(!db_D.containsKey(name)){
-            return "Invalid name";
-        }
-        db_D.remove(name);
-        return "Director removed succesfully";
+    //Get Director by director name
+    Director getDirectorByName(String name){
+        return directorcollection.get(name);
     }
-
-    public String deleteMovie(String name) {
-        if(!db.containsKey(name)){
-            return "Invalid name";
-        }
-        db.remove(name);
-        return "Movie  removed succesfully";
+    //Get List of movies name for a given
+    List<Movie> getMoviesByDirectorName(Director director){
+        return pair.get(director);
+    }
+    //Get List of all movies added
+    //Delete a director and its movies from the records
+    //Delete all directors and all movies by them from the records
+    void deleteAllDirectors(){
+        directorcollection = new HashMap<>();
+        pair = new HashMap<>();
     }
 
 
-    public List<String> findMoviesByDirector(String director) {
-        List<String> movies = new ArrayList<>();
-        for(String specific_director : pair.keySet()){
-            if(specific_director.equals(director)){
-                movies.add(pair.get(director));
-            }
-
-        }
-        return movies;
-    }
-
-    public List<String> findAllMovies() {
-        List<String> allMovies = new ArrayList<>();
-        for(String eachMovie : db.keySet()){
-            allMovies.add(eachMovie);
-        }
-        return allMovies;
-    }
-
-    public String pair_name(String movieName, String directorName) {
-        pair.put(directorName ,movieName );
-        return "Pair made";
-    }
-
-
-
-    public void delete_allDirectors() {
-        db_D.clear();
-    }
 }
